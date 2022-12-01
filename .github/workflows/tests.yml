@@ -102,6 +102,10 @@ jobs:
       - name: Check if OPA is healthy
         run: ./scripts/wait-for.sh -t 60 http://localhost:8181/v1/data/users -- sleep 10 && curl -s "http://localhost:8181/v1/data/users" | jq '.result.bob.location.country == "US"'
 
+      - name: Dump docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2
+
       - name: Output container logs
         run: docker-compose -f docker/docker-compose-test.yml logs
 
